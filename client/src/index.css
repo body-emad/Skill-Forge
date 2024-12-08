@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  font-family: 'Lato', serif;
+}
+
+.not-active-nav-link {
+  @apply text-black text-opacity-50 hover:text-opacity-100 transition-all ease-in-out duration-300 text-[16px] font-medium capitalize dark:text-white dark:text-opacity-50;
+}
+
+.active-nav-link {
+  @apply text-black text-opacity-100 text-[16px] font-medium capitalize dark:text-white;
+}
+
+body {
+  min-height: 100vh;
+}
+
+input:disabled,
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+button:hover {
+  opacity: 0.7;
+}
+
+.shadow-custom {
+  box-shadow: 0px 8px 24px #00000011;
+}
+
+::-webkit-scrollbar {
+  background: #9797e70c;
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bae716c4;
+  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bae716;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #0000ff85;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #0000ff;
+}
+
+/* custom slider button */
+.slick-slider .slick-arrow {
+  height: 50px;
+  width: 50px;
+  background-color: #3f355c;
+  z-index: 5;
+  border-radius: 100px;
+}
+
+.slick-slider .slick-arrow:hover {
+  background-color: #1414df;
+}
+
+.slick-slider .slick-arrow::before {
+  color: #ffffff;
+  font-size: 52px;
+  font-weight: 700;
+  box-shadow: 0px 3px 5px #0000003d;
+  border-radius: 100px;
+}
+
+.slick-slider .slick-next {
+  right: -12px;
+}
+
+.slick-slider .slick-prev {
+  left: -12px;
+}
+
+.slick-dots {
+  bottom: 7px;
+}
+
+.slick-dots li {
+  background-color: rgba(255, 255, 255, 0.356);
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.slick-dots button::before {
+  content: '';
+  display: none;
+}
+
+.slick-dots .slick-active {
+  background: #ffffff;
+  height: 22px;
+  width: 22px;
+}
