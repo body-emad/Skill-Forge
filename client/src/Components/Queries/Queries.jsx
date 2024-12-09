@@ -56,7 +56,7 @@ export default function Queries({
 
       {/* Limit and Sort Section */}
       {courseData?.length > 0 && (
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50 dark:bg-gray-700 p-4 rounded-sm shadow-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-[#f8f7f7] dark:bg-gray-700 p-4 rounded-sm shadow-sm">
           {/* Limit Dropdown */}
           <div className="w-full md:w-[7%]">
             <label

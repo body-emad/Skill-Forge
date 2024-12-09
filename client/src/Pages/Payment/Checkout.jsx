@@ -1,98 +1,97 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Layout from "../../Layout/Layout";
-import { BiRupee } from "react-icons/bi";
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import Layout from '../../Layout/Layout'
+import { BiRupee } from 'react-icons/bi'
 import {
   getRazorPayId,
   purchaseCourseBundle,
   verifyUserPayment,
-} from "../../Redux/Slices/RazorpaySlice";
-import toast from "react-hot-toast";
-import { getUserData } from "../../Redux/Slices/AuthSlice";
+} from '../../Redux/Slices/RazorpaySlice'
+import toast from 'react-hot-toast'
 
 export default function Checkout() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const rzorpayKey = useSelector((state) => state?.razorpay?.key);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const rzorpayKey = useSelector((state) => state?.razorpay?.key)
   const [subscription_id, setSubscription_id] = useState(
     useSelector((state) => state?.razorpay?.subscription_id)
-  );
+  )
   const isPaymentVerified = useSelector(
     (state) => state?.razorpay?.isPaymentVerified
-  );
-  const userData = useSelector((state) => state?.auth?.data);
+  )
+  const userData = useSelector((state) => state?.auth?.data)
   const paymentDetails = {
-    razorpay_payment_id: "",
-    razorpay_subscription_id: "",
-    razorpay_signature: "",
-  };
+    razorpay_payment_id: '',
+    razorpay_subscription_id: '',
+    razorpay_signature: '',
+  }
 
   async function handleSubscription(e) {
-    e.preventDefault();
+    e.preventDefault()
     if (!rzorpayKey || !subscription_id) {
-      toast.error("something went wrong");
-      return;
+      toast.error('something went wrong')
+      return
     }
 
     const options = {
       key: rzorpayKey,
       subscription_id: subscription_id,
-      name: "Coursify Pvt Ltd",
-      description: "subscription",
+      name: 'Coursify Pvt Ltd',
+      description: 'subscription',
       theme: {
-        color: "#fff",
+        color: '#fff',
       },
       prefill: {
         email: userData?.email,
         name: userData?.fullName,
       },
       handler: async function (response) {
-        paymentDetails.razorpay_payment_id = response.razorpay_payment_id;
-        paymentDetails.razorpay_signature = response.razorpay_signature;
+        paymentDetails.razorpay_payment_id = response.razorpay_payment_id
+        paymentDetails.razorpay_signature = response.razorpay_signature
         paymentDetails.razorpay_subscription_id =
-          response.razorpay_subscription_id;
+          response.razorpay_subscription_id
 
-        toast.success("Payment successful");
+        toast.success('Payment successful')
 
-        const res = await dispatch(verifyUserPayment(paymentDetails));
+        const res = await dispatch(verifyUserPayment(paymentDetails))
         if (res?.payload?.success) {
-          navigate("/checkout/success");
+          navigate('/checkout/success')
         } else {
-          navigate("/checkout/fail");
+          navigate('/checkout/fail')
         }
       },
-    };
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+    }
+    const paymentObject = new window.Razorpay(options)
+    paymentObject.open()
   }
 
   useEffect(() => {
     // Fetch the RazorPay ID
-    (async () => {
-      await dispatch(getRazorPayId());
-    })();
+    ;(async () => {
+      await dispatch(getRazorPayId())
+    })()
 
     // Check the user's subscription status
     switch (userData?.subscription?.status) {
-      case "active":
+      case 'active':
         // Navigate outside of the switch statement
-        navigate("/courses");
-        break;
+        navigate('/courses')
+        break
 
       // if already created subscription, then use previous id for this
-      case "created":
-        setSubscription_id(userData?.subscription?.id);
-        break;
+      case 'created':
+        setSubscription_id(userData?.subscription?.id)
+        break
 
       default:
         // If the user doesn't have a subscription, purchase a bundle
-        (async () => {
-          await dispatch(purchaseCourseBundle());
-        })();
-        break;
+        ;(async () => {
+          await dispatch(purchaseCourseBundle())
+        })()
+        break
     }
-  }, [dispatch, navigate, userData]);
+  }, [dispatch, navigate, userData])
   return (
     <Layout>
       <section className="flex flex-col gap-6 items-center py-8 px-3 min-h-[100vh]">
@@ -106,7 +105,7 @@ export default function Checkout() {
             </h1>
             <div className="px-4 space-y-7 text-center text-gray-600 dark:text-gray-300">
               <p className="text-lg mt-5">
-                Unlock access to all available courses on our platform for{" "}
+                Unlock access to all available courses on our platform for{' '}
                 <span className="text-yellow-500 font-bold">1 year</span>. This
                 includes both existing and new courses.
               </p>
@@ -134,5 +133,5 @@ export default function Checkout() {
         </form>
       </section>
     </Layout>
-  );
+  )
 }

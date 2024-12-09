@@ -25,7 +25,14 @@ import AdminDashboard from './Pages/Dashboard/AdminDashboard'
 import Cart from './Components/Cart'
 import Wishlist from './Components/Wishlist'
 
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+import Pay from './Pages/Payment/Pay'
+
 function App() {
+  const stripePromise = loadStripe(
+    'pk_test_51QQ75gKdeYJsEsGlUEJspCXFrMx4QWyWEAMGrAW01rokxXlvB8gOaz5bwf1chtTOvmV9MLQ1ppMKphOtIOPVbnMP00anqxqoWv'
+  )
   return (
     <>
       <Routes>
@@ -58,6 +65,16 @@ function App() {
           <Route path="/course/addlecture" element={<AddLecture />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Route>
+
+        {/* Payment component */}
+        <Route
+          path={'/pay'}
+          element={
+            <Elements stripe={stripePromise}>
+              <Pay />
+            </Elements>
+          }
+        />
 
         <Route element={<RequireAuth allowedRoles={['USER', 'ADMIN']} />}>
           <Route path="/user/profile" element={<Profile />} />

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import Layout from '../Layout/Layout'
 import { useGetCartQuery } from '../Redux/apis/CartSlice'
 import CartItem from './CartItem'
@@ -53,12 +54,13 @@ const Cart = () => {
                 </p>
               </div>
 
-              <button
-                className="w-1/2 text-[14px] bg-blue-600 text-white text-md font-semibold py-3 rounded-lg hover:bg-blue-700 transition"
-                onClick={() => console.log('Proceed to checkout')}
+              <Link
+                state={subtotal}
+                to={'/pay'}
+                className="w-1/2 text-[14px] bg-secondary text-white text-md font-semibold py-2 rounded-md hover:bg-opacity-90 text-center"
               >
-                Checkout
-              </button>
+                Pay
+              </Link>
             </div>
           </div>
         )}

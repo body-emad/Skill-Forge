@@ -8,7 +8,7 @@ import courseRoutes from './routes/course.routes.js'
 import cartRoutes from './routes/cart.routes.js'
 import wishlistRoutes from './routes/wishlist.routes.js'
 import reviewsRoutes from './routes/review.routes.js'
-import paymentRoutes from './routes/payment.routes.js'
+import checkoutRoutes from './routes/checkout.routes.js'
 import miscellaneousRoutes from './routes/miscellaneous.routes.js'
 import express from 'express'
 import connectToDb from './config/db.config.js'
@@ -25,7 +25,7 @@ app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
 
 app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/courses', courseRoutes)
-app.use('/api/v1/payments', paymentRoutes)
+app.use('/api/v1/checkouts', checkoutRoutes)
 app.use('/api/v1/cart', cartRoutes)
 app.use('/api/v1/wishlist', wishlistRoutes)
 app.use('/api/v1/reviews', reviewsRoutes)

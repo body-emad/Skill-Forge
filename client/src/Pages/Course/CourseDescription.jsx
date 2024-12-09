@@ -33,7 +33,7 @@ export default function CourseDescription() {
   const courses = wishlist?.wishlist?.courses
   console.log('courses: ', courses)
 
-  const isCourseInWishlist = courses.some(
+  const isCourseInWishlist = courses?.some(
     (course) => course.courseId._id === courseId
   )
   console.log('isCourseInWishlist: ', isCourseInWishlist)

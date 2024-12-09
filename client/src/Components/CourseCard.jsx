@@ -4,12 +4,12 @@ import useCurrencyFormatter from '../hooks/useCurrencyFormatter'
 
 export default function CourseCard({ data }) {
   const formattedPrice = useCurrencyFormatter(data?.price)
-
+  const formattedTitle = data?.title.split(' ').slice(0, 3).join(' ')
   return (
     <Link
       to={`/courses/description/${data._id}`}
       state={data}
-      className="md:w-[20rem] w-full mx-auto md:max-h-[500px] pb-6 h-[500px] shadow-custom dark:shadow-lg cursor-pointer group overflow-hidden bg-white dark:bg-[#141414]"
+      className="md:w-[20rem] w-full md:max-h-[440px] pb-6 h-[500px] shadow-custom dark:shadow-lg cursor-pointer group overflow-hidden bg-white dark:bg-[#141414]"
     >
       <div className="relative overflow-hidden">
         <img
@@ -19,7 +19,7 @@ export default function CourseCard({ data }) {
         />
       </div>
       <div className="p-4 md:space-y-2 space-y-3 text-gray-800 dark:text-white">
-        <h2 className="text-2xl font-semibold">{data?.title}</h2>
+        <h2 className="text-2xl font-semibold">{formattedTitle}</h2>
         <div className="flex items-center space-x-2">
           <p className="text-[#6C6464]">{data?.createdBy}</p>
           <p className="text-black capitalize dark:text-white pl-[1.5rem] font-medium">
@@ -36,8 +36,13 @@ export default function CourseCard({ data }) {
               alt=""
             />
           ))}
+          <button
+            className="btn-primary text-[13px] px-2 ml-4
+          "
+          >
+            Bestseller
+          </button>
         </div>
-        <button className="btn-primary text-[13px] px-2">Bestseller</button>
       </div>
     </Link>
   )

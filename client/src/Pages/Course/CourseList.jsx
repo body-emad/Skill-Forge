@@ -72,9 +72,9 @@ export default function CourseList() {
   return (
     <Layout>
       <section className="flex flex-col gap-14 md:pb-3 md:pt-[4rem] py-5 md:px-20 px-3 min-h-screen">
-        <h1 className="md:text-[35px] text-2xl w-fit text-black font-black mx-auto dark:text-white relative">
+        <h1 className="md:text-[35px] text-2xl w-fit text-black font-black mx-auto dark:text-white relative capitalize">
           Explore the courses made by
-          <span className="font-semibold text-[#8F42DA] ml-2">
+          <span className=" text-[#8F42DA] ml-2 font-black ">
             Industry experts
           </span>
         </h1>
@@ -97,7 +97,7 @@ export default function CourseList() {
         />
 
         {/* Course Container */}
-        <div className="flex gap-2 md:justify-start justify-center flex-wrap">
+        <div className="flex md:justify-between flex-wrap">
           {coursesData?.map((element) => (
             <CourseCard key={element._id} data={element} />
           ))}
