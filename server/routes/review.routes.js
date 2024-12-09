@@ -2,17 +2,16 @@ import express from 'express'
 
 import {
   createReview,
-  getReviewsByCourse,
   deleteReview,
+  getAllReviews,
 } from '../controllers/review.controller.js'
 
 import { isLoggedIn } from '../middleware/auth.middleware.js'
 
 const router = express.Router()
 
-// Routes
-router.post('/', isLoggedIn, createReview)
-router.get('/:courseId', isLoggedIn, getReviewsByCourse)
-router.delete('/:id', isLoggedIn, deleteReview)
+router.get('/:courseId', getAllReviews)
+router.post('/:courseId', isLoggedIn, createReview)
+router.delete('/:reviewId', isLoggedIn, deleteReview)
 
 export default router

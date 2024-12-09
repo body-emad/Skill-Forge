@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
 export default function TextArea({
   label,
   name,
-  rows, 
+  rows,
   placeholder,
   value,
   onChange,
@@ -12,7 +12,7 @@ export default function TextArea({
     <div className="flex flex-col gap-2">
       <label
         htmlFor={name}
-        className="font-[500] text-xl text-blue-600 dark:text-white font-lato"
+        className="font-[500] text-xl text-black dark:text-white font-lato"
       >
         {label}
       </label>
@@ -26,5 +26,5 @@ export default function TextArea({
         value={value}
       />
     </div>
-  );
+  )
 }

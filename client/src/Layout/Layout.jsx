@@ -5,7 +5,7 @@ import Sidebar from '../Components/Sidebar'
 export default function Layout({ children, hideBar, hideNav, hideFooter }) {
   return (
     <>
-      <main className="min-h-[100vh] bg-[#FBFBFB] dark:bg-[#131212]">
+      <main className="min-h-screen font-lato bg-[#FBFBFB] dark:bg-[#131212] text-black dark:text-white">
         {/* navbar */}
         {!hideNav && <Navbar />}
 

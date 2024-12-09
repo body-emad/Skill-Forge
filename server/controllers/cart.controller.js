@@ -2,11 +2,11 @@ import Cart from '../models/cart.model.js'
 
 const getCart = async (req, res) => {
   try {
-    const { id: userId } = req.user // Extract userId
-    const cart = await Cart.findOne({ userId }).populate(
-      'courses',
-      'title description price'
-    )
+    const { id: userId } = req.user
+    const cart = await Cart.findOne({ userId }).populate({
+      path: 'courses.courseId',
+      model: 'Course',
+    })
     if (!cart) {
       return res.status(404).json({ success: false, message: 'Cart not found' })
     }
@@ -19,10 +19,7 @@ const getCart = async (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const { id: userId } = req.user
-    console.log('req.user: ', req.user)
-    const { courseId } = req.body
-
-    console.log('userId: ', userId)
+    const { courseId, quantity = 1 } = req.body
     console.log('courseId: ', courseId)
 
     // Find the cart by userId
@@ -30,14 +27,20 @@ const addToCart = async (req, res) => {
 
     if (!cart) {
       // If no cart exists, create one
-      cart = new Cart({ userId, courses: [courseId] }) // Use userId here
+      cart = new Cart({ userId, courses: [{ courseId, quantity }] })
     } else {
-      if (!cart.courses.includes(courseId)) {
-        cart.courses.push(courseId)
+      console.log('cart courses: ', cart.courses)
+      // in case cart exists
+      const existingCourseIndex = cart.courses.findIndex(
+        (course) => course.courseId && course.courseId.toString() === courseId
+      )
+
+      // if course exists
+      if (existingCourseIndex !== -1) {
+        console.log('existing course index: ', existingCourseIndex)
+        cart.courses[existingCourseIndex].quantity += quantity
       } else {
-        return res
-          .status(400)
-          .json({ success: false, message: 'Course already in cart' })
+        cart.courses.push({ courseId, quantity })
       }
     }
 
@@ -51,18 +54,20 @@ const addToCart = async (req, res) => {
 // Remove Course from Cart
 const removeFromCart = async (req, res) => {
   try {
-    const { id } = req.user
     const { courseId } = req.params
+    const { cartId } = req.body
 
-    const cart = await Cart.findOne({ id })
+    console.log('courseId: ', courseId)
 
+    const cart = await Cart.findOne({ cartId })
+    console.log('cart: ', cart)
     if (!cart) {
       return res.status(404).json({ success: false, message: 'Cart not found' })
     }
 
     // Remove the course from the cart
     cart.courses = cart.courses.filter(
-      (course) => course.toString() !== courseId
+      (course) => course.courseId.toString() !== courseId
     )
 
     await cart.save()

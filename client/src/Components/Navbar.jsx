@@ -3,12 +3,15 @@ import { FaSun, FaMoon } from 'react-icons/fa'
 import { Link, NavLink } from 'react-router-dom'
 import { FaCartShopping } from 'react-icons/fa6'
 import { useGetCartQuery } from '../Redux/apis/CartSlice'
+import { FaRegHeart } from 'react-icons/fa'
+import { useGetWishlistQuery } from '../Redux/apis/WishlistSlice'
 
 export default function Navbar() {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem('theme') === 'dark'
   )
   const { data: cart, isLoading, isError } = useGetCartQuery()
+  const { data: wishlist, isLoading: wishlistLoading } = useGetWishlistQuery()
 
   const toggleDarkMode = () => {
     setDarkMode((prev) => !prev)
@@ -61,16 +64,28 @@ export default function Navbar() {
         </NavLink>
       </ul>
       <div className="relative">
+        <Link to={'/wishlist'}>
+          <FaRegHeart className="text-[28px] text-black dark:text-white" />
+          {!wishlistLoading &&
+            !isError &&
+            wishlist?.wishlist?.courses?.length > 0 && (
+              <span className="absolute top-[-13px] right-[-10px] w-[22px] h-[22px] bg-primary text-white font-semibold text-xs rounded-full flex items-center justify-center">
+                {wishlist.wishlist.courses.length}
+              </span>
+            )}
+        </Link>
+      </div>
+      <div className="relative ml-[40px]">
         <Link to={'/cart'}>
           <FaCartShopping className="text-[28px] text-black dark:text-white" />
           {!isLoading && !isError && cart?.cart?.courses?.length > 0 && (
-            <span className="absolute top-[-13px] right-[-10px] w-[22px] h-[22px] bg-red-500 text-white font-semibold text-xs rounded-full flex items-center justify-center">
+            <span className="absolute top-[-13px] right-[-10px] w-[22px] h-[22px] bg-primary text-white font-semibold text-xs rounded-full flex items-center justify-center">
               {cart.cart.courses.length}
             </span>
           )}
         </Link>
       </div>
-      <button className="rounded-full text-lg font-semibold ml-[4%] mr-[7%]">
+      <button className="rounded-full text-lg font-semibold ml-[3%] mr-[8%]">
         {darkMode ? (
           <FaSun size={26} className="text-white" onClick={toggleDarkMode} />
         ) : (

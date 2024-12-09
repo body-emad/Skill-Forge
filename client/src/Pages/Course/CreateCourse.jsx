@@ -19,6 +19,7 @@ export default function CreateCourse() {
     description: '',
     thumbnail: null,
     previewImage: '',
+    price: 0,
   })
 
   function handleImageUpload(e) {
@@ -53,7 +54,8 @@ export default function CreateCourse() {
       !userInput.description ||
       !userInput.category ||
       !userInput.createdBy ||
-      !userInput.thumbnail
+      !userInput.thumbnail ||
+      !userInput.price
     ) {
       toast.error('All field are required!')
       return
@@ -64,6 +66,7 @@ export default function CreateCourse() {
     formData.append('title', userInput.title)
     formData.append('description', userInput.description)
     formData.append('category', userInput.category)
+    formData.append('price', userInput.price)
     formData.append('createdBy', userInput.createdBy)
     formData.append('thumbnail', userInput.thumbnail)
 
@@ -76,6 +79,7 @@ export default function CreateCourse() {
         description: '',
         thumbnail: null,
         previewImage: '',
+        price: 0,
       })
     }
     setIsCreatingCourse(false)
@@ -139,6 +143,15 @@ export default function CreateCourse() {
                 placeholder={'Enter Course instructor'}
                 onChange={handleUserInput}
                 value={userInput.createdBy}
+              />
+              {/* Price */}
+              <InputBox
+                label={'Price'}
+                name={'price'}
+                type={'number'}
+                placeholder={'Enter Course Price'}
+                onChange={handleUserInput}
+                value={userInput.price}
               />
               {/* category */}
               <InputBox

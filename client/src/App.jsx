@@ -23,6 +23,7 @@ import AddLecture from './Pages/Dashboard/AddLecture'
 import AdminDashboard from './Pages/Dashboard/AdminDashboard'
 
 import Cart from './Components/Cart'
+import Wishlist from './Components/Wishlist'
 
 function App() {
   return (
@@ -44,9 +45,13 @@ function App() {
           element={<ResetPassword />}
         />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/wishlist" element={<Wishlist />} />
 
         <Route path="/courses" element={<CourseList />} />
-        <Route path="/courses/description" element={<CourseDescription />} />
+        <Route
+          path="/courses/description/:courseId"
+          element={<CourseDescription />}
+        />
 
         <Route element={<RequireAuth allowedRoles={['ADMIN']} />}>
           <Route path="/course/create" element={<CreateCourse />} />
