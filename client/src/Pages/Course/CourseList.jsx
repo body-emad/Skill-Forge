@@ -97,7 +97,7 @@ export default function CourseList() {
         />
 
         {/* Course Container */}
-        <div className="flex md:justify-between flex-wrap">
+        <div className="flex md:justify-start gap-3 flex-wrap">
           {coursesData?.map((element) => (
             <CourseCard key={element._id} data={element} />
           ))}

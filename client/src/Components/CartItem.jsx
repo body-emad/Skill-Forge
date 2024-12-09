@@ -11,9 +11,9 @@ const CartItem = ({ course, cartId }) => {
 
   const courseId = course.courseId?._id
 
-  const handleRemoveFromCart = () => {
+  const handleRemoveFromCart = async () => {
     try {
-      removeFromCart({ courseId, cartId }).unwrap()
+      await removeFromCart({ courseId }).unwrap()
 
       console.log('Removed From Cart')
     } catch (error) {
@@ -34,10 +34,7 @@ const CartItem = ({ course, cartId }) => {
   }
 
   return (
-    <div
-      key={course.courseId?._id || course._id}
-      className="flex items-center justify-between w-[50rem] bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 my-2 pr-6"
-    >
+    <div className="flex items-center justify-between w-[50rem] bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 my-2 pr-6">
       {/* Thumbnail */}
       <img
         src={course.courseId?.thumbnail?.secure_url || ''}

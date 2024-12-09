@@ -6,6 +6,8 @@ import fs from 'fs'
 import cloudinary from 'cloudinary'
 import AppError from '../utils/error.utils.js'
 import sendEmail from '../utils/sendEmail.js'
+import Course from '../models/course.model.js'
+import mongoose from 'mongoose'
 
 const cookieOptions = {
   httpOnly: true,
@@ -322,6 +324,56 @@ const updateUser = async (req, res, next) => {
   }
 }
 
+const updateUserEnrollment = async (req, res) => {
+  const { userId } = req.params
+  const { courseId } = req.body
+  console.log('USER ID 💥', userId)
+  console.log('COURSE ID 💥', courseId)
+
+  let session
+
+  try {
+    session = await mongoose.startSession()
+    session.startTransaction()
+
+    // Update the user's enrolled courses
+    const user = await userModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { enrolledCourses: courseId } },
+      { new: true, session }
+    )
+
+    if (!user) throw new Error('User not found')
+
+    // Update the course's enrollment count and enrolled users
+    const course = await Course.findByIdAndUpdate(
+      courseId,
+      {
+        $inc: { enrollmentCount: 1 },
+        $addToSet: { enrolledUsers: userId },
+      },
+      { new: true, session }
+    )
+
+    if (!course) throw new Error('Course not found')
+
+    // Commit the transaction
+    await session.commitTransaction()
+    session.endSession()
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Enrollment successful', course })
+  } catch (error) {
+    if (session) {
+      await session.abortTransaction()
+      session.endSession()
+    }
+    console.error('Error during enrollment:', error)
+    res.status(500).json({ success: false, message: 'Enrollment failed' })
+  }
+}
+
 export {
   register,
   login,
@@ -331,4 +383,5 @@ export {
   resetPassword,
   changePassword,
   updateUser,
+  updateUserEnrollment,
 }

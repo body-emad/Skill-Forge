@@ -67,6 +67,17 @@ const courseSchema = new Schema(
       type: Number,
       default: 0,
     },
+    enrolledUsers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    enrollmentCount: {
+      type: Number,
+      default: 0,
+    },
+
     createdBy: {
       type: String,
       required: true,

@@ -5,7 +5,9 @@ import axios from 'axios'
 import { useState } from 'react'
 import Layout from '../../Layout/Layout'
 import Loader from '../../Components/Loader'
-// import { useClearCartMutation } from '../../Redux/apis/CartSlice'
+import { useGetCartQuery } from '../../Redux/apis/CartSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateUserEnrollment } from '../../Redux/Slices/UserSlice'
 
 const Pay = () => {
   const stripe = useStripe()
@@ -15,8 +17,14 @@ const Pay = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const amount = location?.state
-  console.log('amount: ', amount)
-  // const [clearCart, { isLoading, isSuccess, isError }] = useClearCartMutation()
+
+  const user = useSelector((state) => state.auth.data)
+  const dispatch = useDispatch()
+
+  const { data: cart } = useGetCartQuery()
+  const courses = cart?.cart?.courses
+  const courseId = courses.map((course) => course.courseId._id)[0]
+  console.log('courseId: ', courseId)
 
   const onSubmit = async (data) => {
     if (!stripe || !elements) {
@@ -28,16 +36,22 @@ const Pay = () => {
 
     try {
       setLoading(true)
+
       // Step 1: Request Payment Intent from the backend
-      const res = await axios.post(
+      const {
+        data: { clientSecret },
+      } = await axios.post(
         'http://localhost:5000/api/v1/checkouts/create-payment-intent',
         {
           amount: Math.round(amount * 100), // Convert to cents
+          email: data.email,
+          address: data.address,
+          phone: data.phone,
+          description: `Payment for order #${Math.random()
+            .toString(36)
+            .substr(2, 9)}`,
         }
       )
-
-      const { clientSecret } = res.data
-      console.log('clientSecret: ', clientSecret)
 
       // Step 2: Confirm the Payment Intent with the clientSecret
       const { paymentIntent, error } = await stripe.confirmCardPayment(
@@ -47,27 +61,35 @@ const Pay = () => {
             card: cardElement,
             billing_details: {
               name: data.name,
+              email: data.email,
+              address: {
+                line1: data.address,
+              },
             },
           },
         }
       )
-
+      const userId = user._id
       if (error) {
-        setLoading(false)
         console.error('Payment failed:', error.message)
+        setLoading(false)
       } else if (paymentIntent.status === 'succeeded') {
-        // clearCart()
-        navigate('/checkout/success')
+        try {
+          await dispatch(updateUserEnrollment({ userId, courseId }))
+
+          console.log('User successfully enrolled in the courses')
+        } catch (error) {
+          console.error('Error updating user enrollment:', error)
+        }
         console.log('Payment successful:', paymentIntent)
+        navigate('/checkout/success')
       }
     } catch (error) {
-      setLoading(false)
-      navigate('/checkout/fail')
-
       console.error(
         'Error processing payment:',
         error.response?.data || error.message
       )
+      navigate('/checkout/fail')
     } finally {
       setLoading(false)
     }
@@ -80,14 +102,51 @@ const Pay = () => {
        bg-[#ccffcc] bg-opacity-40 dark:bg-[#06402B] dark:bg-opacity-30 max-w-[30%] rounded-lg mx-auto"
         onSubmit={handleSubmit(onSubmit)}
       >
+        {/* Name on Card */}
         <div className="flex flex-col items-start justify-center gap-3 w-full">
           <label htmlFor="name">Name on Card</label>
           <input
-            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent "
+            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
             placeholder="Enter name on card"
             id="name"
             name="name"
             {...control.register('name', { required: true })}
+          />
+        </div>
+
+        {/* Email */}
+        <div className="flex flex-col items-start justify-center gap-3 w-full">
+          <label htmlFor="email">Email</label>
+          <input
+            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
+            placeholder="Enter email"
+            id="email"
+            name="email"
+            {...control.register('email', { required: true })}
+          />
+        </div>
+
+        {/* Address */}
+        <div className="flex flex-col items-start justify-center gap-3 w-full">
+          <label htmlFor="address">Address</label>
+          <input
+            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
+            placeholder="Enter address"
+            id="address"
+            name="address"
+            {...control.register('address', { required: true })}
+          />
+        </div>
+
+        {/* Phone */}
+        <div className="flex flex-col items-start justify-center gap-3 w-full">
+          <label htmlFor="phone">Phone</label>
+          <input
+            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
+            placeholder="Enter phone number"
+            id="phone"
+            name="phone"
+            {...control.register('phone', { required: true })}
           />
         </div>
 
@@ -129,6 +188,7 @@ const Pay = () => {
           />
         </div>
 
+        {/* Submit Button */}
         <button
           disabled={loading}
           className="flex items-center justify-center w-[80%] py-3 text-[16px] bg-[#146244] rounded-[5px] text-white hover:bg-opacity-90"

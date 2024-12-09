@@ -52,10 +52,10 @@ const addToWishlist = async (req, res) => {
 
 const removeFromWishlist = async (req, res) => {
   try {
+    const { id: userId } = req.user
     const { courseId } = req.params
-    const { wishlistId } = req.body
 
-    const wishlist = await Wishlist.findOne({ wishlistId })
+    const wishlist = await Wishlist.findOne({ userId })
     if (!wishlist) {
       return res
         .status(404)

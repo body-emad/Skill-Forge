@@ -41,10 +41,12 @@ const userSchema = new Schema(
     },
     forgotPasswordToken: String,
     forgotPasswordExpiry: Date,
-    subscription: {
-      id: String,
-      status: String,
-    },
+    enrolledCourses: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Course',
+      },
+    ],
   },
   {
     timestamps: true,

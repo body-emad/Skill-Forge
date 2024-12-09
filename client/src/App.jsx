@@ -28,6 +28,7 @@ import Wishlist from './Components/Wishlist'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import Pay from './Pages/Payment/Pay'
+import EnrolledCourses from './Pages/Course/EnrolledCourses'
 
 function App() {
   const stripePromise = loadStripe(
@@ -55,6 +56,7 @@ function App() {
         <Route path="/wishlist" element={<Wishlist />} />
 
         <Route path="/courses" element={<CourseList />} />
+        <Route path="/enrolled-courses" element={<EnrolledCourses />} />
         <Route
           path="/courses/description/:courseId"
           element={<CourseDescription />}

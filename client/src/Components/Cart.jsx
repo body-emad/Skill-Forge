@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom'
 import Layout from '../Layout/Layout'
 import { useGetCartQuery } from '../Redux/apis/CartSlice'
 import CartItem from './CartItem'
+import Loader from './Loader'
 
 const Cart = () => {
   const { data: cart, isLoading, isError } = useGetCartQuery()
 
-  if (isLoading) return <p className="text-center text-gray-500">Loading...</p>
+  if (isLoading)
+    return <Loader width={'100px'} height={'100px'} color={'#fff'} />
   if (isError)
     return <p className="text-center text-red-500">Error loading cart</p>
 
@@ -27,7 +29,7 @@ const Cart = () => {
         </h2>
 
         {/* Show message if the cart is empty */}
-        {courses.length === 0 ? (
+        {courses.length === 0 && !isLoading ? (
           <p className="text-gray-500 dark:text-gray-300 text-lg">
             Your cart is empty.
           </p>

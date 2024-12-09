@@ -22,11 +22,10 @@ export const cartSlice = apiSlice.injectEndpoints({
       invalidatesTags: [{ type: 'Cart', id: 'USER_CART' }],
     }),
     removeFromCart: builder.mutation({
-      query: ({ courseId, cartId }) => ({
+      query: ({ courseId }) => ({
         url: `cart/remove/${courseId}`,
         method: 'DELETE',
         credentials: 'include',
-        body: { cartId },
       }),
       invalidatesTags: [{ type: 'Cart', id: 'USER_CART' }],
     }),

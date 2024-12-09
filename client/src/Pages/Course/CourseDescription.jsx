@@ -19,9 +19,9 @@ export default function CourseDescription() {
   const state = location.state
   console.log('state: ', state)
   const { courseId } = useParams()
-  console.log('courseId: ', courseId)
   const navigate = useNavigate()
   const [quantity, setQuantity] = useState(1)
+
   const [addToCart, { isLoading: isAddingToCart }] = useAddToCartMutation()
   const [addToWishlist, { isLoading: isAddingToWishlist }] =
     useAddToWishlistMutation()
@@ -31,12 +31,10 @@ export default function CourseDescription() {
   const { data: wishlist } = useGetWishlistQuery()
   console.log('wishlist: ', wishlist)
   const courses = wishlist?.wishlist?.courses
-  console.log('courses: ', courses)
 
   const isCourseInWishlist = courses?.some(
     (course) => course.courseId._id === courseId
   )
-  console.log('isCourseInWishlist: ', isCourseInWishlist)
 
   const [wishlistStatus, setWishlistStatus] = useState(isCourseInWishlist)
 
@@ -75,8 +73,6 @@ export default function CourseDescription() {
       console.log('Error Handling Wishlist: ', error)
     }
   }
-
-  const { role, data } = useSelector((state) => state.auth)
 
   useEffect(() => {
     if (!state) {

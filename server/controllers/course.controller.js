@@ -1,4 +1,5 @@
 import courseModel from '../models/course.model.js'
+import userModel from '../models/user.model.js'
 import AppError from '../utils/error.utils.js'
 import cloudinary from 'cloudinary'
 import fs from 'fs'
@@ -62,11 +63,15 @@ const getAllCourses = async (req, res, next) => {
 // get specific course
 const getLecturesByCourseId = async (req, res, next) => {
   try {
-    const { id } = req.params
-
-    const course = await courseModel.findById(id)
+    const { userId } = req.params
+    const course = await courseModel.findById(userId)
     if (!course) {
       return next(new AppError('course not found', 500))
+    }
+    const hasAccess = course.enrolledUsers.includes(userId)
+
+    if (!hasAccess) {
+      return next(new AppError('You are not enrolled in this course', 500))
     }
 
     res.status(200).json({

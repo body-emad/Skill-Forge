@@ -7,6 +7,7 @@ const getCart = async (req, res) => {
       path: 'courses.courseId',
       model: 'Course',
     })
+    console.log('CART: ', cart)
     if (!cart) {
       return res.status(404).json({ success: false, message: 'Cart not found' })
     }
@@ -20,7 +21,6 @@ const addToCart = async (req, res) => {
   try {
     const { id: userId } = req.user
     const { courseId, quantity = 1 } = req.body
-    console.log('courseId: ', courseId)
 
     // Find the cart by userId
     let cart = await Cart.findOne({ userId })
@@ -54,13 +54,11 @@ const addToCart = async (req, res) => {
 // Remove Course from Cart
 const removeFromCart = async (req, res) => {
   try {
+    const { id: userId } = req.user // Use userId from the logged-in user
     const { courseId } = req.params
-    const { cartId } = req.body
 
-    console.log('courseId: ', courseId)
-
-    const cart = await Cart.findOne({ cartId })
-    console.log('cart: ', cart)
+    // Find the cart by userId
+    const cart = await Cart.findOne({ userId })
     if (!cart) {
       return res.status(404).json({ success: false, message: 'Cart not found' })
     }
