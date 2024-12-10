@@ -4,6 +4,7 @@ import Course from '../models/course.model.js'
 // Create a review
 export const createReview = async (req, res) => {
   try {
+    const { id: userId } = req.user
     const { courseId } = req.params
     console.log('courseId: ', courseId)
     const { rating, comment } = req.body
@@ -13,7 +14,7 @@ export const createReview = async (req, res) => {
     // Check if the user has already reviewed this course
     const existingReview = await Review.findOne({
       course: courseId,
-      user: req.user._id,
+      user: userId,
     })
     if (existingReview) {
       return res
@@ -24,19 +25,18 @@ export const createReview = async (req, res) => {
     // Create a new review
     const review = new Review({
       course: courseId,
-      user: req.user._id,
+      user: userId,
       rating,
       comment,
     })
 
     await review.save()
 
-    // Update the course's average rating and number of reviews
     const course = await Course.findById(courseId)
     course.averageRating =
       (course.averageRating * course.numberOfRatings + rating) /
       (course.numberOfRatings + 1)
-    course.numberOfRatings += 1 // Increment the number of ratings
+    course.numberOfRatings += 1
     await course.save()
 
     res.status(201).json({ message: 'Review added successfully.', review })
@@ -48,18 +48,19 @@ export const createReview = async (req, res) => {
 // Get all reviews for a course
 export const getAllReviews = async (req, res) => {
   try {
-    const { courseId } = req.params // Changed from productId to courseId
+    const { courseId } = req.params
     console.log('courseId: ', courseId)
 
-    const reviews = await Review.find({ course: courseId }).populate('user') // This will populate the user details
+    const reviews = await Review.find({ course: courseId }).populate('user')
+    console.log('reviews: ', reviews)
 
     if (!reviews || reviews.length === 0) {
       return res
         .status(404)
-        .json({ message: 'No reviews found for this course.' }) // Updated message
+        .json({ message: 'No reviews found for this course.' })
     }
 
-    res.json({ reviews })
+    res.json({ message: 'Reviews retrieved successfully.', reviews })
   } catch (error) {
     res.status(500).json({ message: 'Something went wrong.', error })
   }
@@ -69,8 +70,9 @@ export const getAllReviews = async (req, res) => {
 export const deleteReview = async (req, res) => {
   try {
     const { reviewId } = req.params
+    const { id: userId } = req.user
 
-    const review = await Review.findOne({ _id: reviewId, user: req.user._id })
+    const review = await Review.findOne({ _id: reviewId, user: userId })
     if (!review) {
       return res.status(404).json({ message: 'Review not found.' })
     }

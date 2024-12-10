@@ -75,4 +75,25 @@ const removeFromCart = async (req, res) => {
   }
 }
 
-export { getCart, addToCart, removeFromCart }
+const clearCart = async (req, res) => {
+  try {
+    const { id: userId } = req.user
+
+    const cart = await Cart.findOne({ userId })
+
+    if (!cart) {
+      return res.status(404).json({ success: false, message: 'Cart not found' })
+    }
+
+    cart.courses = []
+    await cart.save()
+
+    res
+      .status(200)
+      .json({ success: true, message: 'Cart cleared successfully', cart })
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message })
+  }
+}
+
+export { getCart, addToCart, removeFromCart, clearCart }

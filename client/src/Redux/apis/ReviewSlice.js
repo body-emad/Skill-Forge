@@ -3,7 +3,7 @@ import { apiSlice } from './apiSlice'
 export const reviewsSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // Fetch reviews for a course
-    getReviews: builder.query({
+    getAllReviews: builder.query({
       query: (courseId) => `/reviews/${courseId}`,
       transformResponse: (response) => response.reviews,
       providesTags: (result, error, courseId) => [
@@ -29,17 +29,14 @@ export const reviewsSlice = apiSlice.injectEndpoints({
       query: ({ reviewId }) => ({
         url: `/reviews/${reviewId}`,
         method: 'DELETE',
-        credentials: 'include',
       }),
-      invalidatesTags: (result, error, { reviewId }) => [
-        { type: 'Reviews', id: reviewId },
-      ],
+      invalidatesTags: [{ type: 'Reviews', id: 'LIST' }],
     }),
   }),
 })
 
 export const {
-  useGetReviewsQuery,
+  useGetAllReviewsQuery,
   useCreateReviewMutation,
   useDeleteReviewMutation,
 } = reviewsSlice

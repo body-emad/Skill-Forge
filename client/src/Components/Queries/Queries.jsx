@@ -1,4 +1,5 @@
 import Select from 'react-select'
+import useDropdownStyles from '../../hooks/useDropdownStyles'
 
 export default function Queries({
   searchTerm,
@@ -15,6 +16,7 @@ export default function Queries({
   handleSearchClick,
   courseData,
 }) {
+  const dropdownStyles = useDropdownStyles()
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row items-center gap-4">
@@ -56,7 +58,7 @@ export default function Queries({
 
       {/* Limit and Sort Section */}
       {courseData?.length > 0 && (
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-[#f8f7f7] dark:bg-gray-700 p-4 rounded-sm shadow-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-[#fbf3fe] dark:bg-gray-700 p-4 rounded-sm shadow-sm">
           {/* Limit Dropdown */}
           <div className="w-full md:w-[7%]">
             <label
@@ -66,6 +68,7 @@ export default function Queries({
               Results per page
             </label>
             <Select
+              styles={dropdownStyles}
               id="limit"
               placeholder="Select limit"
               options={limitOptions}
@@ -83,6 +86,7 @@ export default function Queries({
               Sort by
             </label>
             <Select
+              styles={dropdownStyles}
               id="sort"
               placeholder="Sort by"
               options={sortOptions}

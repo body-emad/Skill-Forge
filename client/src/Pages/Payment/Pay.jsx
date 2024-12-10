@@ -5,7 +5,10 @@ import axios from 'axios'
 import { useState } from 'react'
 import Layout from '../../Layout/Layout'
 import Loader from '../../Components/Loader'
-import { useGetCartQuery } from '../../Redux/apis/CartSlice'
+import {
+  useClearCartMutation,
+  useGetCartQuery,
+} from '../../Redux/apis/CartSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateUserEnrollment } from '../../Redux/Slices/UserSlice'
 
@@ -17,6 +20,7 @@ const Pay = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const amount = location?.state
+  const [clearCart] = useClearCartMutation()
 
   const user = useSelector((state) => state.auth.data)
   const dispatch = useDispatch()
@@ -76,8 +80,8 @@ const Pay = () => {
       } else if (paymentIntent.status === 'succeeded') {
         try {
           await dispatch(updateUserEnrollment({ userId, courseId }))
-
           console.log('User successfully enrolled in the courses')
+          await clearCart()
         } catch (error) {
           console.error('Error updating user enrollment:', error)
         }
@@ -98,15 +102,19 @@ const Pay = () => {
   return (
     <Layout>
       <form
-        className="flex flex-col items-center justify-center py-[120px] px-[60px] min-h-fit
-       bg-[#ccffcc] bg-opacity-40 dark:bg-[#06402B] dark:bg-opacity-30 max-w-[30%] rounded-lg mx-auto"
+        className="flex flex-col items-center justify-center p-8 sm:p-10 bg-white dark:bg-gray-800 shadow-md rounded-lg mx-auto max-w-md space-y-6 mt-6"
         onSubmit={handleSubmit(onSubmit)}
       >
         {/* Name on Card */}
-        <div className="flex flex-col items-start justify-center gap-3 w-full">
-          <label htmlFor="name">Name on Card</label>
+        <div className="flex flex-col w-full space-y-2">
+          <label
+            htmlFor="name"
+            className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            Name on Card
+          </label>
           <input
-            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
+            className="w-full px-4 py-2 border rounded-md text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             placeholder="Enter name on card"
             id="name"
             name="name"
@@ -115,10 +123,15 @@ const Pay = () => {
         </div>
 
         {/* Email */}
-        <div className="flex flex-col items-start justify-center gap-3 w-full">
-          <label htmlFor="email">Email</label>
+        <div className="flex flex-col w-full space-y-2">
+          <label
+            htmlFor="email"
+            className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            Email
+          </label>
           <input
-            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
+            className="w-full px-4 py-2 border rounded-md text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             placeholder="Enter email"
             id="email"
             name="email"
@@ -127,10 +140,15 @@ const Pay = () => {
         </div>
 
         {/* Address */}
-        <div className="flex flex-col items-start justify-center gap-3 w-full">
-          <label htmlFor="address">Address</label>
+        <div className="flex flex-col w-full space-y-2">
+          <label
+            htmlFor="address"
+            className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            Address
+          </label>
           <input
-            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
+            className="w-full px-4 py-2 border rounded-md text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             placeholder="Enter address"
             id="address"
             name="address"
@@ -139,10 +157,15 @@ const Pay = () => {
         </div>
 
         {/* Phone */}
-        <div className="flex flex-col items-start justify-center gap-3 w-full">
-          <label htmlFor="phone">Phone</label>
+        <div className="flex flex-col w-full space-y-2">
+          <label
+            htmlFor="phone"
+            className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            Phone
+          </label>
           <input
-            className="w-full px-5 py-[16px] placeholder:text-[#BBB7B7] border-2 border-[#424141] rounded-[10px] bg-transparent"
+            className="w-full px-4 py-2 border rounded-md text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             placeholder="Enter phone number"
             id="phone"
             name="phone"
@@ -151,34 +174,34 @@ const Pay = () => {
         </div>
 
         {/* Card Element */}
-        <div className="w-full flex flex-col items-start justify-center gap-3 py-10">
-          <label htmlFor="card">Card Details</label>
+        <div className="flex flex-col w-full space-y-2">
+          <label
+            htmlFor="card"
+            className="text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            Card Details
+          </label>
           <Controller
             name="card"
             control={control}
             render={({ field }) => (
               <CardElement
-                className="w-full"
+                className="w-full p-3 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 id="card"
                 options={{
                   style: {
                     base: {
-                      iconColor: '#fff',
+                      iconColor: '#A78BFA',
                       fontWeight: '500',
-                      color: '#fff',
+                      color: '#111827',
                       fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
                       fontSize: '16px',
                       fontSmoothing: 'antialiased',
-                      ':-webkit-autofill': {
-                        color: '#fce883',
-                      },
-                      '::placeholder': {
-                        color: '#BBB7B7',
-                      },
+                      '::placeholder': { color: '#9CA3AF' },
                     },
                     invalid: {
-                      iconColor: '#FFC7EE',
-                      color: '#FFC7EE',
+                      iconColor: '#EF4444',
+                      color: '#EF4444',
                     },
                   },
                 }}
@@ -191,13 +214,9 @@ const Pay = () => {
         {/* Submit Button */}
         <button
           disabled={loading}
-          className="flex items-center justify-center w-[80%] py-3 text-[16px] bg-[#146244] rounded-[5px] text-white hover:bg-opacity-90"
+          className="w-full text-center items-center py-3 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
         >
-          {loading ? (
-            <Loader width={'20px'} height={'20px'} color={'#fff'} />
-          ) : (
-            'Pay'
-          )}
+          {loading ? <Loader width="20px" height="20px" color="#fff" /> : 'Pay'}
         </button>
       </form>
     </Layout>

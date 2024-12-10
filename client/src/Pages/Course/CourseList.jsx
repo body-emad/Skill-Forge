@@ -30,10 +30,12 @@ export default function CourseList() {
   ]
 
   const limitOptions = [
-    { value: 1, label: '1' },
+    { value: 2, label: '2' },
+    { value: 4, label: '4' },
+    { value: 6, label: '6' },
+    { value: 8, label: '8' },
     { value: 12, label: '12' },
     { value: 25, label: '25' },
-    { value: 50, label: '50' },
   ]
 
   // Function to fetch courses based on search criteria

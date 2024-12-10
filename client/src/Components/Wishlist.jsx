@@ -9,7 +9,7 @@ const Wishlist = () => {
   if (isError)
     return <p className="text-center text-red-500">Error loading wishlist</p>
 
-  const courses = wishlist?.wishlist?.courses || [] // Adjust based on the structure of your wishlist data
+  const courses = wishlist?.wishlist?.courses || []
 
   return (
     <Layout>

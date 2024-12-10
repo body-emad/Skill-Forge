@@ -5,7 +5,9 @@ import { axiosInstance } from '../../Helpers/axiosInstance'
 const initialState = {
   isLoggedIn: localStorage.getItem('isLoggedIn') || false,
   role: localStorage.getItem('role') || '',
-  data: JSON.parse(localStorage.getItem('data')) || {},
+  data: localStorage.getItem('data')
+    ? JSON.parse(localStorage.getItem('data'))
+    : {},
 }
 
 // .....signup.........
@@ -138,6 +140,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     // for signup
     builder.addCase(createAccount.fulfilled, (state, action) => {
+      console.log('action.payload: ', action.payload)
       localStorage.setItem('data', JSON.stringify(action?.payload?.user))
       localStorage.setItem('role', action?.payload?.user?.role)
       localStorage.setItem('isLoggedIn', true)

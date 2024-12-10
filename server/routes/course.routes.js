@@ -31,9 +31,10 @@ router
     updateCourseLecture
   )
 
+router.get('/:courseId', isLoggedIn, getLecturesByCourseId)
+
 router
   .route('/:id')
-  .get(isLoggedIn, verifyEnrollment, getLecturesByCourseId)
   .put(
     isLoggedIn,
     authorisedRoles('ADMIN'),

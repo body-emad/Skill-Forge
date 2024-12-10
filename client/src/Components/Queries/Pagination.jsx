@@ -16,11 +16,11 @@ export default function Pagination({
       <button
         onClick={handlePrev}
         disabled={currentPage === 1}
-        className={`px-4 py-2 border ${
+        className={`px-8 py-2 border ${
           currentPage === 1
             ? 'text-gray-400 border-gray-200'
-            : 'text-black border-primary border-2 border-opacity-30'
-        } rounded-md mx-2`}
+            : 'text-white bg-secondary dark:bg-primary '
+        }  mx-2`}
       >
         Prev
       </button>
@@ -31,9 +31,9 @@ export default function Pagination({
           onClick={() => setCurrentPage(page + 1)}
           className={`px-4 py-2 border ${
             page + 1 === currentPage
-              ? 'bg-primary text-white'
-              : 'text-black border-primary border-2 border-opacity-30'
-          } rounded-md mx-2`}
+              ? 'bg-secondary dark:bg-primary text-white'
+              : 'text-black border-secondary dark:bg-primary border-2 border-opacity-80'
+          }  mx-2`}
         >
           {page + 1}
         </button>
@@ -42,11 +42,11 @@ export default function Pagination({
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className={`px-4 py-2 border ${
+        className={`px-8 py-2 border ${
           currentPage === totalPages
             ? 'text-gray-400 border-gray-200'
-            : 'text-black border-primary border-2 border-opacity-30'
-        } rounded-md mx-2`}
+            : 'text-white bg-secondary dark:bg-primary '
+        }  mx-2`}
       >
         Next
       </button>

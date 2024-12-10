@@ -94,7 +94,7 @@ export default function CreateCourse() {
           noValidate
           className="flex flex-col dark:bg-base-100 gap-7 rounded-lg md:py-5 py-7 md:px-7 px-3 md:w-[750px] w-full shadow-custom dark:shadow-xl  "
         >
-          <h1 className="text-center dark:text-purple-500 text-4xl font-bold font-inter">
+          <h1 className="text-center text-white text-4xl font-bold font-inter">
             Create New Course
           </h1>
           <div className="w-full flex md:flex-row md:justify-between justify-center flex-col md:gap-0 gap-5">
@@ -104,7 +104,7 @@ export default function CreateCourse() {
                 <label htmlFor="image_uploads" className="cursor-pointer">
                   {userInput.previewImage ? (
                     <img
-                      className="w-full h-44 m-auto"
+                      className="w-full h-44 m-auto object-cover"
                       src={userInput.previewImage}
                     />
                   ) : (
@@ -179,7 +179,8 @@ export default function CreateCourse() {
           <button
             type="submit"
             disabled={isCreatingCourse}
-            className="mt-3 bg-yellow-500 text-white dark:text-base-200  transition-all ease-in-out duration-300 rounded-md py-2 font-nunito-sans font-[500]  text-lg cursor-pointer"
+            className="mt-3 w-[35%] mx-auto bg-secondary dark:bg-primary text-white
+             transition-all ease-in-out duration-300 rounded-md py-[12px] font-nunito-sans font-[500] text-[16px] cursor-pointer"
           >
             {isCreatingCourse ? 'Creating Course...' : 'Create Course'}
           </button>

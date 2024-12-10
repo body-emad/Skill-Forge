@@ -144,10 +144,15 @@ const logout = async (req, res, next) => {
 }
 
 // getProfile
-const getProfile = async (req, res) => {
+const getProfile = async (req, res, next) => {
   try {
     const { id } = req.user
-    const user = await userModel.findById(id)
+
+    const user = await userModel.findById(id).populate('enrolledCourses')
+
+    if (!user) {
+      return next(new AppError('User not found', 404))
+    }
 
     res.status(200).json({
       success: true,

@@ -8,7 +8,6 @@ export const cartSlice = apiSlice.injectEndpoints({
         method: 'GET',
         credentials: 'include',
       }),
-
       providesTags: (result, error, arg) =>
         result ? [{ type: 'Cart', id: 'USER_CART' }] : [],
     }),
@@ -29,6 +28,14 @@ export const cartSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Cart', id: 'USER_CART' }],
     }),
+    clearCart: builder.mutation({
+      query: () => ({
+        url: 'cart/clear',
+        method: 'DELETE',
+        credentials: 'include',
+      }),
+      invalidatesTags: [{ type: 'Cart', id: 'USER_CART' }],
+    }),
   }),
 })
 
@@ -36,4 +43,5 @@ export const {
   useGetCartQuery,
   useAddToCartMutation,
   useRemoveFromCartMutation,
+  useClearCartMutation,
 } = cartSlice

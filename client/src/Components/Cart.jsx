@@ -8,7 +8,15 @@ const Cart = () => {
   const { data: cart, isLoading, isError } = useGetCartQuery()
 
   if (isLoading)
-    return <Loader width={'100px'} height={'100px'} color={'#fff'} />
+    return (
+      <Layout>
+        <Loader
+          className="flex items-center justify-center min-h-screen mx-auto"
+          width={'80px'}
+          height={'80px'}
+        />
+      </Layout>
+    )
   if (isError)
     return <p className="text-center text-red-500">Error loading cart</p>
 

@@ -16,7 +16,7 @@ export default function HomePage() {
           </p>
 
           <Link to="/courses">
-            <button className="btn-primary px-[22px] py-[11px]">
+            <button className="bg-secondary dark:bg-primary px-[28px] py-[12px] rounded-md hover:opacity-90">
               Explore courses
             </button>
           </Link>

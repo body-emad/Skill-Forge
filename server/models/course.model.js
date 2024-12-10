@@ -65,6 +65,7 @@ const courseSchema = new Schema(
     },
     averageRating: {
       type: Number,
+
       default: 0,
     },
     enrolledUsers: [

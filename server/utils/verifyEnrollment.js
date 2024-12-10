@@ -11,6 +11,7 @@ export const verifyEnrollment = async (req, res, next) => {
     }
 
     const isEnrolled = user.enrolledCourses.includes(courseId)
+    console.log('isEnrolled: ', isEnrolled)
     if (!isEnrolled) {
       return res.status(403).json({
         success: false,

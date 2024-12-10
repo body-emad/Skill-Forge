@@ -4,24 +4,24 @@ import { logout } from '../Redux/Slices/AuthSlice'
 import { Link, useNavigate } from 'react-router-dom'
 import { AiFillCloseCircle } from 'react-icons/ai'
 import { FiMenu } from 'react-icons/fi'
-import {
-  FaHome,
-  FaUserCircle,
-  FaPlus,
-  FaList,
-  FaInfoCircle,
-  FaPhone,
-} from 'react-icons/fa'
+import { FaUserCircle, FaPlus } from 'react-icons/fa'
+import { useClearCartMutation } from '../Redux/apis/CartSlice'
 
 export default function Sidebar({ hideBar = false }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [isLoading, setIsLoading] = useState(false)
   const { isLoggedIn, role, data } = useSelector((state) => state.auth)
+  const [clearCart] = useClearCartMutation()
 
   const onLogout = async function () {
-    await dispatch(logout())
-    navigate('/')
+    try {
+      await dispatch(logout())
+      await clearCart()
+      navigate('/login')
+    } catch (error) {
+      console.log('Error Logging Out: ', error)
+    }
   }
 
   function changeWidth() {

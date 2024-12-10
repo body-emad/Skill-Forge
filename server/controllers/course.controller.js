@@ -1,5 +1,4 @@
 import courseModel from '../models/course.model.js'
-import userModel from '../models/user.model.js'
 import AppError from '../utils/error.utils.js'
 import cloudinary from 'cloudinary'
 import fs from 'fs'
@@ -22,7 +21,7 @@ const getAllCourses = async (req, res, next) => {
       queryObj.title = { $regex: title.trim(), $options: 'i' } // Case-insensitive match
     }
 
-    if (category) {
+    if (category && category !== 'All') {
       queryObj.category = category
     }
 
@@ -63,15 +62,11 @@ const getAllCourses = async (req, res, next) => {
 // get specific course
 const getLecturesByCourseId = async (req, res, next) => {
   try {
-    const { userId } = req.params
-    const course = await courseModel.findById(userId)
+    const { courseId } = req.params
+    console.log('courseId: ', courseId)
+    const course = await courseModel.findById(courseId)
     if (!course) {
       return next(new AppError('course not found', 500))
-    }
-    const hasAccess = course.enrolledUsers.includes(userId)
-
-    if (!hasAccess) {
-      return next(new AppError('You are not enrolled in this course', 500))
     }
 
     res.status(200).json({

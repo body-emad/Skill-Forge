@@ -187,12 +187,6 @@ export default function Profile() {
               className="md:w-[48%] w-[100%]"
               disabled={true}
             />
-            <Link
-              className="btn mx-auto my-auto font-lato text-white px-8"
-              to={'/enrolled-courses'}
-            >
-              My courses
-            </Link>
           </div>
           {/* submit button */}
           <div className="w-full flex md:flex-row flex-col md:justify-between justify-center md:gap-0 gap-3">

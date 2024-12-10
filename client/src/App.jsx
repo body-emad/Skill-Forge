@@ -1,3 +1,5 @@
+import 'video-react/dist/video-react.css'
+
 import { Routes, Route } from 'react-router-dom'
 import HomePage from './Pages/HomePage'
 import AboutUs from './Pages/About'
@@ -30,6 +32,8 @@ import { Elements } from '@stripe/react-stripe-js'
 import Pay from './Pages/Payment/Pay'
 import EnrolledCourses from './Pages/Course/EnrolledCourses'
 
+import ReviewCourse from './Pages/Reviews/ReviewCourse'
+
 function App() {
   const stripePromise = loadStripe(
     'pk_test_51QQ75gKdeYJsEsGlUEJspCXFrMx4QWyWEAMGrAW01rokxXlvB8gOaz5bwf1chtTOvmV9MLQ1ppMKphOtIOPVbnMP00anqxqoWv'
@@ -61,7 +65,7 @@ function App() {
           path="/courses/description/:courseId"
           element={<CourseDescription />}
         />
-
+        <Route path="/review-course" element={<ReviewCourse />} />
         <Route element={<RequireAuth allowedRoles={['ADMIN']} />}>
           <Route path="/course/create" element={<CreateCourse />} />
           <Route path="/course/addlecture" element={<AddLecture />} />

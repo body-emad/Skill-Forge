@@ -1,80 +1,82 @@
-import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { addCourseLecture } from "../../Redux/Slices/LectureSlice";
-import { useLocation, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import InputBox from "../../Components/InputBox/InputBox";
-import TextArea from "../../Components/InputBox/TextArea";
-import Layout from "../../Layout/Layout";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useEffect, useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addCourseLecture } from '../../Redux/Slices/LectureSlice'
+import { useLocation, useNavigate } from 'react-router-dom'
+import toast from 'react-hot-toast'
+import InputBox from '../../Components/InputBox/InputBox'
+import TextArea from '../../Components/InputBox/TextArea'
+import Layout from '../../Layout/Layout'
+import { AiOutlineArrowLeft } from 'react-icons/ai'
+import { Player } from 'video-react'
+import Loader from '../../Components/Loader'
 
 export default function AddLecture() {
-  const courseDetails = useLocation().state;
+  const courseDetails = useLocation().state
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const [isLoading, setIsLoading] = useState(false);
-  const videoRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false)
+  const videoRef = useRef(null)
   const [userInput, setUserInput] = useState({
     id: courseDetails?._id,
     lecture: undefined,
-    title: "",
-    description: "",
-    videoSrc: "",
-  });
+    title: '',
+    description: '',
+    videoSrc: '',
+  })
 
   function handleInputChange(e) {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setUserInput({
       ...userInput,
       [name]: value,
-    });
+    })
   }
 
   function handleVideo(e) {
-    const video = e.target.files[0];
-    const source = window.URL.createObjectURL(video);
+    const video = e.target.files[0]
+    const source = window.URL.createObjectURL(video)
     setUserInput({
       ...userInput,
       lecture: video,
       videoSrc: source,
-    });
+    })
   }
 
   async function onFormSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
     if (!userInput.lecture || !userInput.title || !userInput.description) {
-      toast.error("All fields are mandatory");
-      return;
+      toast.error('All fields are mandatory')
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
 
-    const formData = new FormData();
-    formData.append("lecture", userInput.lecture);
-    formData.append("title", userInput.title);
-    formData.append("description", userInput.description);
+    const formData = new FormData()
+    formData.append('lecture', userInput.lecture)
+    formData.append('title', userInput.title)
+    formData.append('description', userInput.description)
 
-    const data = { formData, id: userInput.id };
+    const data = { formData, id: userInput.id }
 
-    const response = await dispatch(addCourseLecture(data));
+    const response = await dispatch(addCourseLecture(data))
     if (response?.payload?.success) {
-      navigate(-1);
+      navigate(-1)
       setUserInput({
         id: courseDetails?._id,
         lecture: undefined,
-        title: "",
-        description: "",
-        videoSrc: "",
-      });
+        title: '',
+        description: '',
+        videoSrc: '',
+      })
     }
-    setIsLoading(false);
+    setIsLoading(false)
   }
 
   useEffect(() => {
-    if (!courseDetails) navigate("/courses");
-  }, []);
+    if (!courseDetails) navigate('/courses')
+  }, [])
 
   return (
     <Layout>
@@ -90,10 +92,10 @@ export default function AddLecture() {
               className="absolute left-2 text-xl text-green-500"
               onClick={() => navigate(-1)}
             >
-              <AiOutlineArrowLeft />
+              <AiOutlineArrowLeft className="text-primary text-[1.8rem]" />
             </button>
-            <h1 className="text-center dark:text-purple-500 md:text-4xl text-2xl font-bold font-inter">
-              Add new lecture
+            <h1 className="text-center capitalize dark:text-purple-500 md:text-4xl text-2xl font-bold font-inter">
+              Add new <span className="text-primary">lecture</span>
             </h1>
           </header>
           <div className="w-full flex md:flex-row md:justify-between justify-center flex-col md:gap-0 gap-5">
@@ -101,18 +103,14 @@ export default function AddLecture() {
               {/* lecture video */}
               <div className="border border-gray-300 h-[200px] flex justify-center cursor-pointer">
                 {userInput.videoSrc && (
-                  <video
-                    muted
+                  <Player
                     src={userInput.videoSrc}
-                    controls
-                    controlsList="nodownload nofullscreen"
-                    disablePictureInPicture
                     className="object-fill w-full"
                     onClick={(e) => {
-                      e.preventDefault();
-                      videoRef.current.click();
+                      e.preventDefault()
+                      videoRef.current.click()
                     }}
-                  ></video>
+                  />
                 )}
                 {!userInput.videoSrc && (
                   <label
@@ -136,20 +134,20 @@ export default function AddLecture() {
             <div className="md:w-[48%] w-full flex flex-col gap-5">
               {/* title */}
               <InputBox
-                label={"Title"}
-                name={"title"}
-                type={"text"}
-                placeholder={"Enter Lecture Title"}
+                label={'Title'}
+                name={'title'}
+                type={'text'}
+                placeholder={'Enter Lecture Title'}
                 onChange={handleInputChange}
                 value={userInput.title}
               />
               {/* description */}
               <TextArea
-                label={"Description"}
-                name={"description"}
+                label={'Description'}
+                name={'description'}
                 rows={5}
-                type={"text"}
-                placeholder={"Enter Lecture Description"}
+                type={'text'}
+                placeholder={'Enter Lecture Description'}
                 onChange={handleInputChange}
                 value={userInput.description}
               />
@@ -160,12 +158,17 @@ export default function AddLecture() {
           <button
             type="submit"
             disabled={isLoading}
-            className="mt-3 bg-yellow-500 text-white dark:text-base-200  transition-all ease-in-out duration-300 rounded-md py-2 font-nunito-sans font-[500]  text-lg cursor-pointer"
+            className="mt-3 w-1/2 mx-auto bg-primary text-white dark:text-base-200  transition-all ease-in-out 
+            duration-300 md py-2 font-nunito-sans font-[500] text-[16px] cursor-pointer"
           >
-            {isLoading ? "Adding Lecture..." : "Add New Lecture"}
+            {isLoading ? (
+              <Loader width={'20px'} height={'20px'} color={'#fff'} />
+            ) : (
+              'Add New Lecture'
+            )}
           </button>
         </form>
       </section>
     </Layout>
-  );
+  )
 }

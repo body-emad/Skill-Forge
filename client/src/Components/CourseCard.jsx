@@ -3,13 +3,14 @@ import FullStar from '../assets/images/fullStar.png'
 import useCurrencyFormatter from '../hooks/useCurrencyFormatter'
 
 export default function CourseCard({ data }) {
+  console.log('data: ', data)
   const formattedPrice = useCurrencyFormatter(data?.price)
   const formattedTitle = data?.title.split(' ').slice(0, 3).join(' ')
   return (
     <Link
       to={`/courses/description/${data._id}`}
       state={data}
-      className="md:w-[20rem] w-full md:max-h-[440px] pb-6 h-[500px] shadow-custom dark:shadow-lg cursor-pointer group overflow-hidden bg-white dark:bg-[#141414]"
+      className="md:w-[20.5rem] w-full md:max-h-[440px] shadow-md pb-6 h-[500px] shadow-custom dark:shadow-lg cursor-pointer group overflow-hidden bg-white dark:bg-[#141414]"
     >
       <div className="relative overflow-hidden">
         <img
@@ -19,10 +20,12 @@ export default function CourseCard({ data }) {
         />
       </div>
       <div className="p-4 md:space-y-2 space-y-3 text-gray-800 dark:text-white">
-        <h2 className="text-2xl font-semibold">{formattedTitle}</h2>
-        <div className="flex items-center space-x-2">
-          <p className="text-[#6C6464]">{data?.createdBy}</p>
-          <p className="text-black capitalize dark:text-white pl-[1.5rem] font-medium">
+        <h2 className="text-2xl font-semibold whitespace-nowrap">
+          {formattedTitle}
+        </h2>
+        <div className="flex items-center">
+          <p className="text-[#6C6464] whitespace-nowrap">{data?.createdBy}</p>
+          <p className="text-black capitalize dark:text-white pl-[10px] font-medium whitespace-nowrap">
             Starting from <span className="text-primary">{formattedPrice}</span>
           </p>
         </div>
@@ -36,12 +39,22 @@ export default function CourseCard({ data }) {
               alt=""
             />
           ))}
-          <button
-            className="btn-primary text-[13px] px-2 ml-4
+          {data?.isBestSeller && (
+            <button
+              className="btn-secondary text-[13px] px-2 ml-4
           "
-          >
-            Bestseller
-          </button>
+            >
+              Bestseller
+            </button>
+          )}
+          {data?.isFeatured && (
+            <button
+              className="btn-primary text-[13px] px-2 ml-4
+          "
+            >
+              Bestseller
+            </button>
+          )}
         </div>
       </div>
     </Link>
